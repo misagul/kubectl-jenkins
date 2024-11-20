@@ -15,5 +15,3 @@ RUN echo \
 
 RUN apt-get update
 RUN apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-RUN usermod -a -G docker jenkins
-RUN chown :docker /var/run/
