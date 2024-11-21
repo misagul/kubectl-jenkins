@@ -19,7 +19,7 @@ spec:
       serviceAccountName: jenkins-admin
       containers:
         - name: jenkins
-          image: jenkins/jenkins:lts
+          image: isagultmp/jenkins-with-docker
           resources:
             limits:
               memory: "2Gi"
@@ -50,8 +50,19 @@ spec:
             failureThreshold: 3
           volumeMounts:
             - name: jenkins-data
-              mountPath: /var/jenkins_home         
+              mountPath: /var/jenkins_home
+            - name: dockersock
+              mountPath: /var/run
+        - name: dind
+          image: docker:dind
+          volumeMounts:
+            - name: dockersock
+              mountPath: /var/run
+          securityContext:
+            privileged: true
       volumes:
         - name: jenkins-data
           persistentVolumeClaim:
               claimName: jenkins-pv-claim
+        - name: dockersock
+          emptyDir: {}
