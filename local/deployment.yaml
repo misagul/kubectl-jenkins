@@ -18,6 +18,13 @@ spec:
             runAsUser: 1000
       serviceAccountName: jenkins-admin
       containers:
+        - name: dind
+          image: docker:dind
+          volumeMounts:
+            - name: dockersock
+              mountPath: /var/run
+          securityContext:
+            privileged: true
         - name: jenkins
           image: isagultmp/jenkins-with-docker
           resources:
@@ -53,13 +60,6 @@ spec:
               mountPath: /var/jenkins_home
             - name: dockersock
               mountPath: /var/run
-        - name: dind
-          image: docker:dind
-          volumeMounts:
-            - name: dockersock
-              mountPath: /var/run
-          securityContext:
-            privileged: true
       volumes:
         - name: jenkins-data
           persistentVolumeClaim:
